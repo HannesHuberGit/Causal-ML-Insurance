@@ -1,0 +1,50 @@
+<section id="stages" data-transition="fade" style="background:#FBFBF8; color:#4A5568; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:12px">
+  <p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#6B7280">Our setup</p>
+  <h2 style="font-size:44px; font-weight:600; line-height:1.15; color:#14213D">Double ML splits the work: first predict, then estimate the effect</h2>
+  <div style="position:absolute; left:128px; top:315px; width:1664px; height:190px; display:flex; flex-direction:row; align-items:center; gap:40px; background:#F1F1EC; border-radius:12px; padding:0px 48px">
+    <div style="flex:1; display:flex; flex-direction:column; gap:8px">
+      <p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#6B7280">First stage · prediction</p>
+      <p style="font-size:28px; font-weight:600; line-height:1.3; color:#14213D">Predict lapse and price from customer features</p>
+      <p style="font-size:24px; line-height:1.35"><span style="color:#0F7F5A; font-weight:600">Lapse model</span> and <span style="color:#4A3AA7; font-weight:600">price model</span></p>
+    </div>
+    <p style="font-size:44px; font-weight:600; color:#6B7280">→</p>
+    <div style="flex:1; display:flex; flex-direction:column; gap:8px">
+      <p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#6B7280">Final stage · causal estimate</p>
+      <p style="font-size:28px; font-weight:600; line-height:1.3; color:#14213D">Read the price effect from what is left over</p>
+      <p style="font-size:24px; line-height:1.35"><span style="color:#1C5CAB; font-weight:600">Price effect</span>, from the residuals</p>
+    </div>
+  </div>
+  <div data-build-in="fade 1" style="position:absolute; left:128px; top:553px; width:1664px; display:flex; flex-direction:column; gap:20px">
+    <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">Why LightGBM for the first stage</h3>
+    <div style="display:flex; flex-direction:row; gap:32px">
+      <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#F1F1EC; border-radius:12px; padding:28px">
+        <p style="font-size:28px; font-weight:600; line-height:1.25; color:#14213D">Many rating factors</p>
+        <p style="font-size:24px; line-height:1.35">Learns shapes and interactions by itself, without hand-built terms</p>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#F1F1EC; border-radius:12px; padding:28px">
+        <p style="font-size:28px; font-weight:600; line-height:1.25; color:#14213D">Categories and gaps</p>
+        <p style="font-size:24px; line-height:1.35">Handles categorical features and missing values natively, with little data prep</p>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#F1F1EC; border-radius:12px; padding:28px">
+        <p style="font-size:28px; font-weight:600; line-height:1.25; color:#14213D">Fast</p>
+        <p style="font-size:24px; line-height:1.35">Cross-fitting means many fits; they stay cheap</p>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:12px; background:#F1F1EC; border-radius:12px; padding:28px">
+        <p style="font-size:28px; font-weight:600; line-height:1.25; color:#14213D">Only needs to predict well</p>
+        <p style="font-size:24px; line-height:1.35">Its errors multiply in the final stage, so small errors fade out</p>
+      </div>
+    </div>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">Other learners would work too; LightGBM is a robust default for tabular data</p>
+  <aside>Message: from the toy to our real setup. Double ML has two stages with two different jobs, and we chose a learner for each.
+
+The strip is a short recap of the "How Double ML works" slide, to reset after the convergence chart. First stage: pure prediction, lapse model and price model, judged like any ML model on hold-out loss. Final stage: the causal step, the price effect read from the residuals; there is no ground truth to score it against, so it rests on the assumptions (closing box of the previous slide).
+
+Click 1, why LightGBM in the first stage:
+- Many rating factors: gradient-boosted trees learn non-linear shapes and interactions without us specifying them, unlike a GLM.
+- Categories and gaps: native handling of categorical features (also many levels) and missing values.
+- Fast: cross-fitting fits both first-stage models once per fold, so speed matters.
+- Only needs to predict well: the callback to the previous slide. The final-stage bias is a product of the two first-stage errors, so the first stage does not need to be perfect, only good. This is exactly what a strong prediction model delivers.
+
+Alternatives: GLM or Lasso (too rigid for many factors; its errors do not shrink and leave bias), random forests, neural networks (more tuning). Double ML allows any of them; LightGBM was the pragmatic default.</aside>
+</section>

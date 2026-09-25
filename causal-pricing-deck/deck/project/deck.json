@@ -3,12 +3,13 @@
   "createdOnFiles": {"v": 1, "at": "2026-09-25T03:05:00Z"},
   "title": "Causal Pricing: LightGBM vs Double ML",
   "cover": "question",
-  "order": ["question", "confounding", "extrapolation", "residualise", "decision", "orthogonality"],
+  "order": ["question", "confounding", "extrapolation", "residualise", "decision", "orthogonality", "stages", "final-stage", "forest"],
   "sections": {
     "s1": {"description": "The business question and a toy renewal portfolio with a known answer", "start": "question"},
     "s2": {"description": "Why raw data and a standard ML model give the wrong what-if", "start": "confounding"},
     "s3": {"description": "How Double ML works and what it changes for the pricing decision", "start": "residualise"},
-    "s4": {"description": "Why Double ML is better, and what it needs", "start": "orthogonality"}
+    "s4": {"description": "Why Double ML is better, and what it needs", "start": "orthogonality"},
+    "s5": {"description": "How we built it: which learner in each stage, and why", "start": "stages"}
   },
   "faces": {
     "ibm-plex-sans": {"family": "IBM Plex Sans", "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap"}
