@@ -1,10 +1,10 @@
 # Causal pricing deck: LightGBM vs Double ML
 
-A 9-slide deck on causal ML in insurance pricing. It uses a toy renewal/lapse portfolio with a known truth.
+An 8-slide deck on causal ML in insurance pricing. It uses a toy renewal/lapse portfolio with a known truth.
 
 Live deck (Claude Slides artifact, private): https://claude.ai/artifact/TakwyxEBZxjuxXRuNt7iBw
 
-Story: confounding (age) → extrapolation (LightGBM freezes) → how Double ML works → pricing decision → why Double ML is better (convergence) → our setup: LightGBM first stage, final-stage options, why the causal forest.
+Story: confounding (age) → extrapolation (LightGBM freezes) → how Double ML works → pricing decision → why Double ML is better (convergence) → our setup: LightGBM first stage, then the final-stage options and why the causal forest.
 
 ## Toy world (`cont.py`)
 
