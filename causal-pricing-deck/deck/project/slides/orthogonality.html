@@ -5,7 +5,7 @@
   <img src="/_blob/f309cc1e64f44b8477e148a0280189e1" alt="Axes for the estimated price effect against portfolio size from 100 to 200,000 policies, with the true value 1.0 as a dashed line; at 100 and 200 policies too little data." style="position:absolute; left:128px; top:360px; width:900px; height:520px">
   <img data-build-in="fade 1" src="/_blob/b71233fb802225ed2d091427e7d0bdc0" alt="LightGBM's estimate approaches the truth only slowly, reaching 0.82 at 200,000 policies; the remaining gap is labelled bias." style="position:absolute; left:128px; top:360px; width:900px; height:520px">
   <img data-build-in="fade 2" src="/_blob/4a217a1475ec70ce0dd4e368392c3c10" alt="Double ML's estimate is noisy and somewhat low up to a few thousand policies, and sits on the truth from about 5,000 policies." style="position:absolute; left:128px; top:360px; width:900px; height:520px">
-  <div data-build-in="fade 3" style="position:absolute; left:1092px; top:440px; width:700px; display:flex; flex-direction:column; gap:40px">
+  <div data-build-in="fade 3" style="position:absolute; left:1092px; top:360px; width:700px; display:flex; flex-direction:column; gap:16px">
     <div style="display:flex; flex-direction:column; gap:4px; border-left:4px solid #EB6834; padding:4px 0px 4px 24px">
       <p style="font-size:24px; font-weight:600; color:#14213D">LightGBM</p>
       <img src="/_blob/586280be0b7b53925cacafb8a6e8c192" alt="bias approximately equals the price slope of f hat minus f, shrinking like n to the minus one third" style="width:452px; height:56px">
@@ -16,6 +16,14 @@
       <img src="/_blob/1d28f4fe678afc2362f4361a0f6df5b9" alt="bias approximately equals the expectation of the price-model error times the age-effect error, divided by the expectation of V squared, shrinking like n to the minus two thirds" style="width:515px; height:56px">
       <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price-model error</span> × age-effect error:<br>shrinks faster than the noise</p>
     </div>
+  </div>
+  <div data-build-in="fade 4" style="position:absolute; left:1092px; top:703px; width:700px; display:flex; flex-direction:column; gap:10px; background:#F1F1EC; border-radius:12px; padding:20px 28px">
+    <p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#6B7280">What Double ML needs</p>
+    <ol style="font-size:24px; line-height:1.35; color:#14213D">
+      <li>No hidden drivers of both price and lapse</li>
+      <li>Free price variation: discounts, loadings, tests</li>
+      <li>A response shape, assumed beyond the data</li>
+    </ol>
   </div>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">30 portfolios per size · line: median · band: 10th–90th percentile · same LightGBM in both methods</p>
   <aside>Message: the answer to "why?". Same learner, same tuning; only the way the price effect is extracted differs.
@@ -44,6 +52,10 @@ Builds
   - LightGBM: one error ≈ n^(−1/3), falls behind its spread. Double ML: product ≈ n^(−2/3), faster than the noise.
   - Measured: LightGBM ≈ n^(−0.3); Double ML product term −0.13 (2k), −0.09 (5k), −0.03 (20k), −0.009 (50k), −0.003 (200k) ≈ n^(−0.8).
   - Formal need: product faster than n^(−1/2), e.g. each error faster than n^(−1/4).
+- Click 4, what Double ML needs:
+  - All drivers of price and lapse in the model (violation: agents discount customers who threaten to leave).
+  - Free price variation in every segment: discounts, loadings, A/B tests, tariff changes. Less of it → more data needed (E[V²]).
+  - A response shape beyond the data, testable only inside it (e.g. T² via econml's treatment_featurizer).
 
-Bridge: "What Double ML needs" is on the closing slide.</aside>
+Takeaway: prediction models to predict; causal estimators, with explicit assumptions, to decide.</aside>
 </section>
