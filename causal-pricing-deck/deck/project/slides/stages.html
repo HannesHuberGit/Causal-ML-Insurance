@@ -48,7 +48,7 @@ Builds
   - Both first stages: pure prediction, judged on hold-out loss, cross-fitted as before.
 - Click 3, final stage: price effect from the residuals.
   - Toy: one number, Ỹ ≈ θ̂·T̃. Now θ̂(X) may differ per customer; how flexibly is the next slide.
-  - The causal step: no ground truth to score it → rests on "What Double ML needs".
+  - The causal step: no ground truth to score it → rests on "What every method needs".
 - Click 4, why LightGBM in the first stage. Heading: the same LightGBM that failed with price as a feature; here it only predicts, which it is good at.
   - Many rating factors: learns shapes and interactions without us specifying them, unlike a GLM.
   - Categories and gaps: native categorical features (also many levels) and missing values.

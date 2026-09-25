@@ -18,11 +18,11 @@
     </div>
   </div>
   <div data-build-in="fade 4" style="position:absolute; left:1092px; top:703px; width:700px; display:flex; flex-direction:column; gap:10px; background:#F1F1EC; border-radius:12px; padding:20px 28px">
-    <p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#6B7280">What Double ML needs</p>
+    <p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#6B7280">What every method needs</p>
     <ol style="font-size:24px; line-height:1.35; color:#14213D">
       <li>No hidden drivers of both price and lapse</li>
       <li>Free price variation: discounts, loadings, tests</li>
-      <li>A response shape, assumed beyond the data</li>
+      <li>A response shape beyond the data: Double ML states it, LightGBM assumes flat</li>
     </ol>
   </div>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">30 portfolios per size · line: median · band: 10th–90th percentile · same LightGBM in both methods</p>
@@ -52,10 +52,11 @@ Builds
   - LightGBM: one error ≈ n^(−1/3), falls behind its spread. Double ML: product ≈ n^(−2/3), faster than the noise.
   - Measured: LightGBM ≈ n^(−0.3); Double ML product term −0.13 (2k), −0.09 (5k), −0.03 (20k), −0.009 (50k), −0.003 (200k) ≈ n^(−0.8).
   - Formal need: product faster than n^(−1/2), e.g. each error faster than n^(−1/4).
-- Click 4, what Double ML needs:
+- Click 4, what every method needs: the ground rules for any price effect from our own data, LightGBM with price as a feature included.
   - All drivers of price and lapse in the model (violation: agents discount customers who threaten to leave).
   - Free price variation in every segment: discounts, loadings, A/B tests, tariff changes. Less of it → more data needed (E[V²]).
-  - A response shape beyond the data, testable only inside it (e.g. T² via econml's treatment_featurizer).
+  - A response shape beyond the data, testable only inside it (e.g. T² via econml's treatment_featurizer). LightGBM assumes flat (extrapolation slide), silently.
+  - Difference: Double ML's CI widens when price variation is thin, a visible warning; LightGBM's effect just shrinks into age (the 0.82).
 
 Takeaway: prediction models to predict; causal estimators, with explicit assumptions, to decide.</aside>
 </section>
