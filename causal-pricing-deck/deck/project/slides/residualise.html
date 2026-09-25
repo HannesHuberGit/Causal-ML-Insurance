@@ -1,0 +1,57 @@
+<section id="residualise" data-transition="fade" style="background:#FBFBF8; color:#4A5568; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:12px">
+  <p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#6B7280">How Double ML works</p>
+  <h2 style="font-size:44px; font-weight:600; line-height:1.15; color:#14213D">Double ML removes what age predicts from price and lapse, then reads the effect</h2>
+  <div style="position:absolute; left:128px; top:315px; width:1664px; height:148px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; background:#F1F1EC; border-radius:12px; padding:0px 40px">
+    <div style="width:300px; display:flex; flex-direction:column; gap:6px">
+      <p style="font-size:24px; font-weight:600; line-height:1.3; color:#14213D">Partially linear model</p>
+      <p style="font-size:24px; line-height:1.35">X: age · g: age effect<br>V: free price variation</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:4px">
+      <img src="/_blob/4bf0423a9c331239bf3d8a7388814c1c" alt="Y equals theta T plus g of X plus epsilon" style="width:244px; height:56px">
+      <img src="/_blob/403b8363770b004b0463c3dad4a8aca4" alt="T equals m of X plus V" style="width:184px; height:56px">
+    </div>
+    <p style="width:300px; font-size:24px; line-height:1.35; text-align:center">subtract what age predicts, on both sides →</p>
+    <div style="display:flex; flex-direction:column; gap:4px">
+      <img src="/_blob/38d8f957bfb32851a1badafe372223fd" alt="Y minus ell of X approximately equals theta times T minus m of X" style="width:307px; height:56px">
+      <p style="width:358px; font-size:24px; line-height:1.35"><span style="color:#0F7F5A; font-weight:600">lapse model</span>, <span style="color:#4A3AA7; font-weight:600">price model</span>: what age predicts</p>
+    </div>
+  </div>
+  <div data-build-in="fade 1" style="position:absolute; left:128px; top:503px; width:520px; height:410px; display:flex; flex-direction:column; gap:10px">
+    <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">1 · Predict lapse from age</h3>
+    <img src="/_blob/8496074573ab0753481622aa2adadc8c" alt="Lapse rate by age with the lapse model's fitted line; lapse falls with age." style="width:520px; height:250px">
+    <img src="/_blob/1c55950a1883a917fed138e5359b19d2" alt="Y tilde equals Y minus ell hat of X" style="width:178px; height:56px">
+    <p style="font-size:24px; line-height:1.35"><span style="color:#0F7F5A; font-weight:600">Lapse model</span> · first stage</p>
+  </div>
+  <div data-build-in="fade 2" style="position:absolute; left:700px; top:503px; width:520px; height:410px; display:flex; flex-direction:column; gap:10px">
+    <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">2 · Predict price from age</h3>
+    <img src="/_blob/7449fae8d99f04432acbadc3a3439608" alt="Price against age with the price model's fitted line, which recovers the smooth tariff." style="width:520px; height:250px">
+    <img src="/_blob/18bbf673ce54de878a61abc84c218038" alt="T tilde equals T minus m hat of X" style="width:182px; height:56px">
+    <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price model</span> · first stage</p>
+  </div>
+  <div data-build-in="fade 3" style="position:absolute; left:1272px; top:503px; width:520px; height:410px; display:flex; flex-direction:column; gap:10px">
+    <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">3 · Regress residual on residual</h3>
+    <img src="/_blob/f9aec89664f4f272e29c16efc5e442af" alt="Lapse residuals against price residuals lie on a straight line." style="width:520px; height:250px">
+    <img src="/_blob/dd2aa50813c47b66c187d0e1c0955823" alt="Y tilde approximately equals theta hat times T tilde" style="width:102px; height:56px">
+    <p style="font-size:24px; line-height:1.35"><span style="color:#1C5CAB; font-weight:600">Slope = price effect</span> · final stage</p>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">First stages cross-fitted in 5 folds: each policy is predicted by models that never saw it</p>
+  <aside>Message: Double ML is one equation, estimated in three steps. The grey strip is the whole model; the three columns are how it is fitted.
+
+The model (partially linear model). Y = θ·T + g(X) + ε: lapse is a price effect θ·T plus an age effect g(X) of any shape plus noise, E[ε | X, T] = 0. T = m(X) + V: price is what the tariff predicts from age, m(X), plus free price variation V with E[V | X] = 0 (discounts and loadings).
+
+The trick. Take the expectation given X: ℓ(X) := E[Y | X] = θ·m(X) + g(X). Subtract it from Y: Y − ℓ(X) = θ·(T − m(X)) + ε (on the slide: ≈, with the noise ε left out). The age effect is gone; θ is the slope of the lapse residual on the price residual, whatever g and m look like (Frisch–Waugh–Lovell with ML in place of linear regressions). ML fits only ℓ and m; g is never fitted directly (the ĝ = ℓ̂ − θ·m̂ in the closing slide's notes is just the age effect these two fits imply).
+
+Builds, one per step. Colours: aqua = lapse model, violet = price model, blue = the Double ML price effect.
+1. First stage, econml model_y: LightGBM predicts lapse from age, ℓ̂(X); residual Ỹ = Y − ℓ̂(X).
+2. First stage, econml model_t: LightGBM predicts price from age, m̂(X), and recovers the tariff; T̃ = T − m̂(X) estimates V.
+3. Final stage: least squares of Ỹ on T̃ through the origin (Ỹ ≈ θ̂·T̃ on the slide): θ̂ = Σ T̃·Ỹ / Σ T̃² = 1.02, heteroskedasticity-robust standard error 0.049, 95% CI 0.92 to 1.11. Truth 1.00. The dots are 20 bins of T̃; the regression uses all 200,000 policies.
+In econml: LinearDML(model_y=..., model_t=..., cv=5).fit(Y, T, X=None, W=age); early stopping inside needs a small wrapper class. Chernozhukov et al. write V for the true price residual; econml calls the estimated residuals T_res and Y_res.
+
+Same learner, same tuning as on the extrapolation slide: 0.82 when price is one more feature, 1.02 when LightGBM only handles the age parts. The closing slide shows this is systematic.
+
+Expected question: "Would our GLM not do the same?" In this one-factor toy, yes (1.02), because the tariff is linear in age. With many rating factors a GLM needs hand-built interactions and shapes to compete; Double ML lets ML learn them.
+
+Cross-fitting (footer): nuisance models trained on 4 folds predict the 5th, rotated. In-sample, a flexible model partly memorises each policy's discount and noise, shrinking the residuals and biasing θ̂. In this toy in-sample gives almost the same answer (1.018); it bites with many factors and flexible learners.
+
+Information comes only from V. With a pure tariff (no discounts, loadings, tests or tariff changes) θ is not identified and the confidence interval widens: a warning, not a guarantee (closing slide).</aside>
+</section>
