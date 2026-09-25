@@ -1,0 +1,30 @@
+<section id="confounding" data-transition="fade" style="background:#FBFBF8; color:#4A5568; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:12px">
+  <p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#6B7280">Confounding</p>
+  <h2 style="font-size:44px; font-weight:600; line-height:1.15; color:#14213D">Age drives both price and lapse, so the small price effect only shows at fixed age</h2>
+  <p style="position:absolute; left:128px; top:315px; width:1000px; font-size:24px; font-weight:600; color:#14213D">Lapse rate vs price, five narrow age groups</p>
+  <img src="/_blob/521d5d2d91812e7863e2a498e8e16aa2" alt="Binned lapse rate against price for all ages together: the raw trend falls as price rises." style="position:absolute; left:128px; top:360px; width:1000px; height:540px">
+  <img data-build-in="fade 1" src="/_blob/4a0d67ddc0da8cb36eed51a5ab05ea29" alt="The same points coloured by age group: within each group lapse rises with price; older groups sit further right and lower." style="position:absolute; left:128px; top:360px; width:1000px; height:540px">
+  <div data-build-in="fade 2" style="position:absolute; left:1192px; top:376px; width:600px; display:flex; flex-direction:column; gap:28px">
+    <div style="display:flex; flex-direction:column; gap:4px; border-left:6px solid #C3C8D0; padding:4px 0px 4px 24px">
+      <p style="font-size:24px; color:#6B7280">All ages together</p>
+      <p style="font-size:32px; font-weight:600; line-height:1.25; color:#14213D">Higher price, lower lapse</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:4px; border-left:6px solid #47556F; padding:4px 0px 4px 24px">
+      <p style="font-size:24px; color:#6B7280">At fixed age</p>
+      <p style="font-size:32px; font-weight:600; line-height:1.25; color:#14213D">Higher price, higher lapse</p>
+    </div>
+    <p style="font-size:28px; line-height:1.4; color:#14213D">The difference is age: older customers pay more and are more loyal.</p>
+  </div>
+  <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">200,000 simulated policies · age groups ±2.5 years</p>
+  <aside>Message: age drives both our price and the customer's loyalty. The price effect only becomes visible when age is held fixed, and it is small next to the age effect.
+
+Builds. Start: all policies in grey, and the pale line is the raw trend across all ages: lapse falls as price rises. Pause and ask the room: "So should we raise prices to make customers more loyal?"
+Click 1: colour by age group. Within each narrow group (age ± 2.5 years) the tariff barely changes (about ±0.6%), so prices differ mainly by the random discount or loading. There, a higher price means more lapse, slope ≈ +1 pp per +1% price. The five fitted slopes scatter around 1 (sampling noise, plus a slight pull-down from the age range left within each group).
+Why the groups drift down from left to right: moving right means moving to older customers, who pay more (our tariff) AND lapse less (loyalty). The raw trend is that age effect, not a price effect.
+Click 2: the summary. All ages together, a higher price goes with lower lapse; at fixed age, a higher price means higher lapse. The difference is age, which moves both.
+Size of the two effects, if asked: holding price fixed, age 25 → 75 lowers lapse by 29 pp; holding age fixed, discounts and loadings (standard deviation 2%) typically move lapse by about ±2 pp. The effect we want is the small one. This matters on the closing slide: a model tuned for prediction pays most attention to the big signal.
+
+Every model from here on, LightGBM and Double ML alike, sees age. The question is how well each separates a small price effect from a large age effect.
+
+Only if asked: the raw slope across all ages is −0.86 pp per +1%. It equals the true +1.00 plus a confounding term Cov(price, age effect g) / Var(price) = −1.86.</aside>
+</section>

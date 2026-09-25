@@ -1,0 +1,25 @@
+<section id="decision" data-transition="fade" style="background:#FBFBF8; color:#4A5568; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:12px">
+  <p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#6B7280">Decision</p>
+  <h2 style="font-size:44px; font-weight:600; line-height:1.15; color:#14213D">Double ML finds the margin optimum, while LightGBM keeps raising prices</h2>
+  <p style="position:absolute; left:128px; top:315px; width:900px; font-size:24px; font-weight:600; color:#14213D">Expected margin after a price change for all customers</p>
+  <img src="/_blob/33b32a827b431c90e650cf0f2fea6438" alt="The true margin curve rises, peaks at plus 24 percent and falls again." style="position:absolute; left:128px; top:360px; width:900px; height:520px">
+  <img data-build-in="fade 1" src="/_blob/8415dd858c7441243335316ea115bcf6" alt="LightGBM's margin curve keeps rising and leaves the chart: no optimum." style="position:absolute; left:128px; top:360px; width:900px; height:520px">
+  <img data-build-in="fade 2" src="/_blob/7e8ef45c3b3e8d33a9bbc71ef3c2fd1b" alt="Double ML's margin curve tracks the truth; a light blue 95 percent band around it is narrow near today's price and widens further out." style="position:absolute; left:128px; top:360px; width:900px; height:520px">
+  <p data-build-in="fade 1" style="position:absolute; left:1092px; top:376px; width:700px; font-size:24px; line-height:1.4; border-left:4px solid #EB6834; padding:4px 0px 4px 24px">LightGBM’s lapse freezes beyond the data, so every price rise looks like profit.</p>
+  <p data-build-in="fade 2" style="position:absolute; left:1092px; top:484px; width:700px; font-size:24px; line-height:1.4; border-left:4px solid #2A78D6; padding:4px 0px 4px 24px">Double ML assumes a linear price response, true in this toy, and lands on the optimum. Band: its 95% confidence range.</p>
+  <div data-build-in="fade 3" style="position:absolute; left:1092px; top:608px; width:700px; display:flex; flex-direction:column; gap:12px; border-left:4px solid #EB6834; padding:4px 0px 4px 24px">
+    <p style="font-size:28px; font-weight:600; line-height:1.35; color:#14213D">And even inside the data, LightGBM’s price effect is too small.</p>
+    <p style="font-size:28px; line-height:1.35; color:#14213D">Why?</p>
+  </div>
+  <aside>Message: the modelling choice changes the pricing decision, not just a coefficient. LightGBM fails twice: it freezes beyond the data, and its price effect is biased even inside it (next slide).
+
+Margin per policy = (1 − lapse(x)) × (premium × (1 + x) − expected claims), claims = 60% of today's premium; index today = 100. Raising prices earns more per retained policy but loses policies, so the true curve has an interior optimum: +24%, index 113. Context: at +24% lapse would be 48% instead of 26.5% today, and this margin ignores expenses and customer lifetime value.
+
+Builds. Start: the true curve and its optimum. Pause and ask: "Where would LightGBM set the price?"
+Click 1, "LightGBM: no optimum": its lapse stops responding from about +12% (extrapolation slide), so every extra percent looks like pure profit. The curve leaves the chart; at +40% it promises 184 where the truth is 109.
+Click 2, Double ML: lapse after a +x% change = ℓ̂(X) + θ̂·log(1 + x) for every customer, with θ̂ = 1.02 (so +24% adds about 22 pp of lapse, not 24). Optimum +24%, index 113. The band: the margin curves at the two ends of the 95% confidence interval of θ (0.92 to 1.11); it covers the uncertainty of θ only. It is zero at today's price and widens with the distance from the data. Its optimum lies between +19% and +30%; the curve is flat near its peak, so anywhere in that range the true margin is at least 112.7, less than one index point below the best.
+Click 3, the hook: even inside the data, LightGBM's price effect is too small (0.82 instead of 1.00, extrapolation slide). Why? That is the next slide.
+Only if asked, "is it just the flat extrapolation?": give LightGBM the same straight-line extrapolation with its own slope of 0.82 per +1%. It then recommends +39% and promises 125; the true margin there is 109 instead of 113. Same extrapolation, still wrong: the slope itself is off.
+
+The linearity caveat stays: the optimum lies about six times beyond the observed ±4% price variation, so it rests on the assumed linear response in log price. In this toy that is true by construction; in practice it is an assumption to state openly (see "What Double ML needs" on the closing slide).</aside>
+</section>

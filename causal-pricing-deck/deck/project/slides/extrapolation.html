@@ -1,0 +1,24 @@
+<section id="extrapolation" data-transition="fade" style="background:#FBFBF8; color:#4A5568; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:12px">
+  <p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#6B7280">Extrapolation</p>
+  <h2 style="font-size:44px; font-weight:600; line-height:1.15; color:#14213D">LightGBM on age and price gets the sign right, but freezes beyond the data</h2>
+  <p style="position:absolute; left:128px; top:315px; width:800px; font-size:24px; font-weight:600; color:#14213D">Where the data is: price vs age</p>
+  <img src="/_blob/ff1099df72932fd74ccec6934259aaea" alt="Observed customers: price rises smoothly with age and stays close to the tariff at every age." style="position:absolute; left:128px; top:360px; width:800px; height:440px">
+  <img data-build-in="fade 1" src="/_blob/ce14c9acee8edaaa5537fa9d9e2714f5" alt="The same customers shifted up by 20 percent: the whole cloud lies above anything observed." style="position:absolute; left:128px; top:360px; width:800px; height:440px">
+  <p data-build-in="fade 1" style="position:absolute; left:128px; top:824px; width:800px; font-size:24px; line-height:1.4">At any age, observed prices sit close to the tariff; +20% moves every customer beyond them.</p>
+  <p data-build-in="fade 2" style="position:absolute; left:992px; top:315px; width:800px; font-size:24px; font-weight:600; color:#14213D">Lapse rate after a price change for all customers</p>
+  <img data-build-in="fade 2" src="/_blob/b5760f09d97730469da68fc618ba3824" alt="True lapse rises steadily with the price change; the observed price variation is a narrow band around zero." style="position:absolute; left:992px; top:360px; width:800px; height:440px">
+  <img data-build-in="fade 3" src="/_blob/29ddf7f971eb75498108ca7e61816cbb" alt="LightGBM follows the truth roughly inside the observed band, bends away beyond it and then stays flat." style="position:absolute; left:992px; top:360px; width:800px; height:440px">
+  <p data-build-in="fade 3" style="position:absolute; left:992px; top:824px; width:800px; font-size:24px; line-height:1.4">Inside the range: right sign, slope too low (0.82 vs 1.0). Beyond it, LightGBM uses older customers’ lapse, then freezes.</p>
+  <aside>Message: including the confounder fixes the sign locally, but the what-if we care about lies outside the data.
+
+LightGBM is fitted on (age, price) → lapse and tuned the way we tune for prediction: early stopping on a 20% hold-out (53 boosting rounds here). The what-if: multiply every customer's price by (1 + x), keep age, average the predicted lapse.
+
+Builds. Start: where the data is. What matters is not the global price range (older customers do pay +13%) but the price range GIVEN age: observed prices stay within about ±4% of the tariff (±2 standard deviations of the discounts and loadings). Causal-inference name: overlap or positivity.
+Click 1: the same customers after +20%. No observed 30-year-old pays that much.
+Click 2: the true lapse curve. Pause and ask: "What will LightGBM predict at +20%?"
+Click 3: LightGBM. Inside the observed range the sign is right, but the slope is 0.82 pp per +1% instead of 1.00: regularisation shrinks the weak price signal (the closing slide explains why, and how slowly this goes away with more data). Beyond the range it first borrows: at +8% a customer lands at a price only older customers pay, so the model answers with their response (31.7% predicted vs 34.2% true). From about +12%, most customers’ prices exceed anything seen at any age and the prediction freezes: 33% at +20% (truth 45%), 33% at +40% (truth 60%).
+
+Why flat: a tree is piecewise constant. Beyond its highest split on price, near the top of the observed price range (about +17% vs the age-25 base), every prediction falls into the same leaf; a sum of trees is flat there too. So LightGBM's lapse does not "go up" at the edge, it stops responding, and its margin then looks like free money (Decision slide).
+
+Honest note: every method extrapolates beyond the data only through assumptions. Trees assume "flat"; Double ML with a linear price term assumes "linear in log price". Neither is learned from data out there.</aside>
+</section>
