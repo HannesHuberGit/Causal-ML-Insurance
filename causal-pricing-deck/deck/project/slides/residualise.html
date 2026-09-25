@@ -26,7 +26,7 @@
     <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">2 · Predict price from age</h3>
     <img src="/_blob/7449fae8d99f04432acbadc3a3439608" alt="Price against age with the price model's fitted line, which recovers the smooth tariff." style="width:520px; height:250px">
     <img src="/_blob/18bbf673ce54de878a61abc84c218038" alt="T tilde equals T minus m hat of X" style="width:182px; height:56px">
-    <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price model</span> · first stage</p>
+    <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price model</span> · T̃: discounts and loadings</p>
   </div>
   <div data-build-in="fade 3" style="position:absolute; left:1272px; top:503px; width:520px; height:410px; display:flex; flex-direction:column; gap:10px">
     <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">3 · Regress residual on residual</h3>
@@ -45,7 +45,7 @@ The model
 
 Builds (aqua = lapse model, violet = price model, blue = Double ML effect)
 - Click 1: LightGBM predicts lapse from age, ℓ̂(X) (econml model_y); Ỹ = Y − ℓ̂(X).
-- Click 2: LightGBM predicts price from age, m̂(X) (model_t), recovers the tariff; T̃ estimates V.
+- Click 2: LightGBM predicts price from age, m̂(X) (model_t), recovers the tariff; T̃ estimates V: the discounts and loadings, the only experiment in the data.
 - Click 3: least squares of Ỹ on T̃ through the origin: θ̂ = 1.02, SE 0.049, 95% CI 0.92–1.11. Truth 1.00.
   - Dots are 20 bins of T̃; the regression uses all 200,000 policies.
 

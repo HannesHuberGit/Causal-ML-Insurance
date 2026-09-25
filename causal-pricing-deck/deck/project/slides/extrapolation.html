@@ -1,6 +1,6 @@
 <section id="extrapolation" data-transition="fade" style="background:#FBFBF8; color:#4A5568; font-family:'IBM Plex Sans', Arial, sans-serif; padding:128px 128px 160px; display:flex; flex-direction:column; gap:12px">
   <p style="font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#6B7280">Extrapolation</p>
-  <h2 style="font-size:44px; font-weight:600; line-height:1.15; color:#14213D">LightGBM on age and price gets the sign right, but freezes beyond the data</h2>
+  <h2 style="font-size:44px; font-weight:600; line-height:1.15; color:#14213D">LightGBM with price as a feature gets the sign right, but freezes beyond the data</h2>
   <p style="position:absolute; left:128px; top:315px; width:800px; font-size:24px; font-weight:600; color:#14213D">Where the data is: price vs age</p>
   <img src="/_blob/ff1099df72932fd74ccec6934259aaea" alt="Observed customers: price rises smoothly with age and stays close to the tariff at every age." style="position:absolute; left:128px; top:360px; width:800px; height:440px">
   <img data-build-in="fade 1" src="/_blob/ce14c9acee8edaaa5537fa9d9e2714f5" alt="The same customers shifted up by 20 percent: the whole cloud lies above anything observed." style="position:absolute; left:128px; top:360px; width:800px; height:440px">
@@ -8,7 +8,7 @@
   <p data-build-in="fade 2" style="position:absolute; left:992px; top:315px; width:800px; font-size:24px; font-weight:600; color:#14213D">Lapse rate after a price change for all customers</p>
   <img data-build-in="fade 2" src="/_blob/b5760f09d97730469da68fc618ba3824" alt="True lapse rises steadily with the price change; the observed price variation is a narrow band around zero." style="position:absolute; left:992px; top:360px; width:800px; height:440px">
   <img data-build-in="fade 3" src="/_blob/29ddf7f971eb75498108ca7e61816cbb" alt="LightGBM follows the truth roughly inside the observed band, bends away beyond it and then stays flat." style="position:absolute; left:992px; top:360px; width:800px; height:440px">
-  <p data-build-in="fade 3" style="position:absolute; left:992px; top:824px; width:800px; font-size:24px; line-height:1.4">Inside the range: right sign, slope too low (0.82 vs 1.0). Beyond it, LightGBM uses older customers’ lapse, then freezes.</p>
+  <p data-build-in="fade 3" style="position:absolute; left:992px; top:824px; width:800px; font-size:24px; line-height:1.4">Inside the range: right sign, slope too low (0.82 vs 1.0). Beyond it, LightGBM borrows older customers’ response, then goes flat.</p>
   <aside>Message: adding age fixes the sign locally, but the what-if we care about lies outside the data.
 
 Setup
