@@ -3,7 +3,7 @@
   "createdOnFiles": {"v": 1, "at": "2026-09-25T03:05:00Z"},
   "title": "Causal Pricing: LightGBM vs Double ML",
   "cover": "question",
-  "order": ["question", "confounding", "extrapolation", "residualise", "decision", "orthogonality", "stages", "final-stage", "forest"],
+  "order": ["question", "confounding", "extrapolation", "residualise", "decision", "orthogonality", "stages", "final-stage"],
   "sections": {
     "s1": {"description": "The business question and a toy renewal portfolio with a known answer", "start": "question"},
     "s2": {"description": "Why raw data and a standard ML model give the wrong what-if", "start": "confounding"},
