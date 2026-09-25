@@ -34,13 +34,18 @@
     </div>
   </div>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">Same first stage in all three; only the last step differs</p>
-  <aside>Message: the toy had one price effect for everyone. Real customers differ: young vs old, new vs long-standing, online vs agent. The first stage stays the same; the final stage decides how the effect may vary across customers.
+  <aside>Message: the toy had one price effect for everyone; real customers differ (young vs old, new vs long-standing, online vs agent). Same first stage; the final stage decides how the effect may vary.
 
-Builds, left to right: simple → flexible → flexible and reliable.
-
-Click 1, Linear (econml LinearDML). What the toy used: one price effect, or a linear formula in a few chosen features. Easy to explain and stable, with standard confidence intervals. Limitation: the effect can only vary in the shape we write down.
-
-Click 2, Boosted final stage. A LightGBM model learns the price effect as a function of the customer features from the first-stage residuals. We followed Causal Inference for the Brave and True (M. Facure, chapter on Debiased/Orthogonal ML). In its principled form this is the R-learner (Nie and Wager, 2021; in econml NonParamDML with a LightGBM final model): regress the lapse residual divided by the price residual on the features, weighted by the squared price residual. Strength: the most flexible final stage, any shape, any ML model. Weakness: the residuals are noisy, and where the price residual is small the model can chase that noise. There are no confidence intervals out of the box.
-
-Click 3, Causal forest (econml CausalForestDML), our choice. The forest grows its trees to separate customers whose price effect differs, and uses honest trees and built-in confidence intervals. Why this won: next slide. The honest trade-off: a segment-level effect is harder to explain than one number.</aside>
+Builds: simple → flexible → flexible and reliable
+- Click 1, Linear (econml LinearDML): what the toy used.
+  - One effect, or a linear formula in a few chosen features.
+  - Explainable, stable, standard CIs. Varies only in the shape we write down.
+- Click 2, Boosted final stage:
+  - Source: Facure, Causal Inference for the Brave and True (Debiased/Orthogonal ML chapter).
+  - Principled form: R-learner (Nie and Wager, 2021); econml NonParamDML with a LightGBM final model.
+  - Regress Ỹ / T̃ on the features, weighted by T̃².
+  - Most flexible; but where T̃ is small it can chase noise. No CIs out of the box.
+- Click 3, Causal forest (econml CausalForestDML), our choice:
+  - Splits on effect differences, honest trees, built-in CIs. Why it won: next slide.
+  - Trade-off: a segment-level effect is harder to explain than one number.</aside>
 </section>

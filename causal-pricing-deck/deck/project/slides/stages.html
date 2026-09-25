@@ -36,15 +36,19 @@
     </div>
   </div>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">Other learners would work too; LightGBM is a robust default for tabular data</p>
-  <aside>Message: from the toy to our real setup. Double ML has two stages with two different jobs, and we chose a learner for each.
+  <aside>Message: from the toy to our setup. Two stages, two jobs, one learner choice each.
 
-The strip is a short recap of the "How Double ML works" slide, to reset after the convergence chart. First stage: pure prediction, lapse model and price model, judged like any ML model on hold-out loss. Final stage: the causal step, the price effect read from the residuals; there is no ground truth to score it against, so it rests on the assumptions (closing box of the previous slide).
+Strip (recap of "How Double ML works", to reset after the convergence chart)
+- First stage: pure prediction, lapse and price models, judged on hold-out loss.
+- Final stage: the causal step. No ground truth to score it → rests on the assumptions ("What Double ML needs").
 
-Click 1, why LightGBM in the first stage:
-- Many rating factors: gradient-boosted trees learn non-linear shapes and interactions without us specifying them, unlike a GLM.
-- Categories and gaps: native handling of categorical features (also many levels) and missing values.
-- Fast: cross-fitting fits both first-stage models once per fold, so speed matters.
-- Only needs to predict well: the callback to the previous slide. The final-stage bias is a product of the two first-stage errors, so the first stage does not need to be perfect, only good. This is exactly what a strong prediction model delivers.
+Click 1, why LightGBM in the first stage
+- Many rating factors: learns shapes and interactions without us specifying them, unlike a GLM.
+- Categories and gaps: native categorical features (also many levels) and missing values.
+- Fast: both first-stage models are refitted once per fold.
+- Only needs to predict well: final-stage bias is a product of first-stage errors (convergence slide).
 
-Alternatives: GLM or Lasso (too rigid for many factors; its errors do not shrink and leave bias), random forests, neural networks (more tuning). Double ML allows any of them; LightGBM was the pragmatic default.</aside>
+Alternatives, if asked
+- GLM or Lasso: too rigid for many factors; errors don't shrink, bias stays.
+- Random forests, neural networks: possible, more tuning. LightGBM = pragmatic default.</aside>
 </section>

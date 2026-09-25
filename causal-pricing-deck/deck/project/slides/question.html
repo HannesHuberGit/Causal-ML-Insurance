@@ -28,17 +28,25 @@
     </div>
   </div>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#8A96AB">Toy world · 200,000 simulated policies · effect sizes exaggerated for visibility</p>
-  <aside>Purpose: set up the question and the toy world.
+  <aside>Message: pricing asks a what-if (intervention); a lapse model answers "who lapses at which price" (prediction).
+- They differ because we set prices from the same factors that drive lapse.
 
-Pricing asks an interventional question: if WE change the price, what happens to lapse? A lapse model answers a different question: among customers who happen to pay a certain price, how many lapse? The two coincide only if nothing else differs between customers at different prices. In insurance that is never true, because we set prices from the same rating factors that also drive lapse.
+Builds
+- Click 1: tariff rises with age.
+- Click 2: older customers lapse less.
+- Click 3: the arrow we want, price → lapse (θ). Every other path runs through age: confounding.
+- Click 4: the toy world.
 
-Builds. Click 1: our tariff rises with age. Click 2: older customers lapse less. Click 3: the arrow we need, price → lapse, θ. Every other path between price and lapse runs through age: that is confounding. Click 4: the toy world.
+Toy world (known truth, so every method can be graded)
+- Age 25–75, one rating factor (in practice: all rating factors).
+- Tariff: +2.5% per 10 years of age (+13% from 25 to 75).
+- Plus discounts and loadings, SD 2%, symmetric: the only "experiment" in the data.
+- Lapse = g(age) + θ·T, θ = 1: +1% price → +1.0 pp lapse for everybody. Average lapse 26%.
+- 200,000 policies; effect sizes exaggerated, mechanisms as in real data.
 
-Toy world, built so the true answer is known and every method can be graded:
-- Age uniform 25–75. One rating factor only (in practice: all rating factors).
-- Tariff: log price rises by 0.0025 per year of age (+2.5% per 10 years, +13% from age 25 to 75). On top, individual discounts and loadings, normal with mean 0 and standard deviation 0.02 (2%); symmetric, so half the customers pay slightly more than tariff. This is the only "experiment" in the data.
-- Lapse probability = g(age) + θ · T, with g falling with age and θ = 1.0: +1% price → +1.0 pp lapse for everybody. Average lapse 26%.
-- 200,000 simulated policies. Effect sizes are exaggerated for visibility; the mechanisms are the same as in real data.
-
-Symbols used later: Y = lapse (0/1); T = log price vs the age-25 base price; X = age (in practice all rating factors); θ = price effect, pp lapse per +1% price; g(X) = age effect; ℓ(X) = E[Y | X], the lapse model; m(X) = E[T | X], the price model (what the tariff predicts); V = T − m(X), free price variation (discounts and loadings); Ỹ = Y − ℓ̂(X) and T̃ = T − m̂(X), the estimated residuals (T̃ estimates V); f̂ = LightGBM with price as a feature, estimating f(X, T) = E[Y | X, T].</aside>
+Symbols for later slides
+- Y lapse (0/1) · T log price vs age-25 base · X age (in practice all rating factors) · θ price effect, pp per +1%.
+- g(X) age effect · ℓ(X) = E[Y | X] lapse model · m(X) = E[T | X] price model (what the tariff predicts).
+- V = T − m(X) free price variation · Ỹ = Y − ℓ̂(X), T̃ = T − m̂(X) estimated residuals.
+- f̂ = LightGBM with price as a feature, estimating f(X, T) = E[Y | X, T].</aside>
 </section>
