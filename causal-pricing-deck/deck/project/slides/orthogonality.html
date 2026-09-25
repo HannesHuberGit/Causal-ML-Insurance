@@ -18,26 +18,45 @@
     </div>
   </div>
   <div data-build-in="fade 4" style="position:absolute; left:1092px; top:703px; width:700px; display:flex; flex-direction:column; gap:10px; background:#F1F1EC; border-radius:12px; padding:20px 28px">
-    <p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#6B7280">What Double ML needs</p>
+    <p style="font-size:24px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#6B7280">What every method needs</p>
     <ol style="font-size:24px; line-height:1.35; color:#14213D">
       <li>No hidden drivers of both price and lapse</li>
       <li>Free price variation: discounts, loadings, tests</li>
-      <li>A response shape, assumed beyond the data</li>
+      <li>A response shape beyond the data: Double ML states it, LightGBM assumes flat</li>
     </ol>
   </div>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">30 portfolios per size · line: median · band: 10th–90th percentile · same LightGBM in both methods</p>
-  <aside>Message: the answer to "why?". Same learner, same tuning; the only difference is how the price effect is extracted. Both get there eventually, but Double ML much faster.
+  <aside>Message: the answer to "why?". Same learner, same tuning; only the way the price effect is extracted differs.
 
-What is shown. For each portfolio size (100 to 200,000 policies) 30 independent toy portfolios, each fitted with (a) LightGBM on (age, price), tuned by early stopping, price effect read as the average ±2% what-if slope, and (b) Double ML with the same LightGBM in both first stages, 5-fold cross-fitting. Line = median (Double ML's estimates are skewed at small sizes, so the mean jumps around), band = 10th–90th percentile; a marker on the bottom edge means off the scale.
+Chart
+- 30 portfolios per size (100 to 200,000 policies).
+- LightGBM on (age, price), effect = ±2% what-if slope; Double ML with the same LightGBM, 5-fold cross-fitting.
+- Line = median (Double ML is skewed at small sizes), band = 10th–90th percentile; marker on bottom edge = off scale.
 
-Builds. Start: axes and truth. Pause and ask: "Which method gets closer with more data?"
-Click 1, LightGBM (medians): 0.16 at 2k, 0.63 at 20k, 0.82 at 200k. It converges, but slowly. From 2k on its bias is 2–4× its own run-to-run spread: precise but wrong. Across the 30 portfolios its 95% range at 200k (0.73–0.91) still excludes the truth.
-Click 2, Double ML. At 100–200 policies neither method works: LightGBM (minimum leaf size 50) is nearly constant, and Double ML cannot learn the age effects and falls towards the raw, confounded slope (median −1.12 at 100). From 300 to 2k policies it is noisy and still somewhat low (medians 0.75–0.85): the first stages are not yet good enough. From about 5k it sits on the truth (median 1.00 at 5k and at 200k); its standard error matches the real spread (0.049 vs 0.049 at 200k) and its 95% CI covers the truth in 95% of all runs from 500 policies up (87–100% per size, 30 runs each).
-Click 3, the two formulas. "∼" reads "shrinks like".
-LightGBM: its price effect is the ±2% what-if slope of f̂; the truth f(X, T) = E[Y | X, T] has slope θ, so bias = price slope of (f̂ − f): one error, first order. Early stopping keeps f̂ − f small in size, not flat in price: it mutes the weak price signal (discounts move lapse ±2 pp, age 29 pp). With 1,000 fixed rounds the slope reaches 0.999, but the hold-out loss gets worse (0.1901 → 0.1918): only the truth says when to stop.
-Double ML, with ĝ = ℓ̂ − θ·m̂ (the age effect the first stages imply): θ̂ − θ = E[(m̂ − m)(ĝ − g)] / E[T̃²] plus mean-zero noise, and E[T̃²] = E[V²] + E[(m̂ − m)²] ≈ E[V²]. Only the product of two errors survives (Neyman orthogonality). Expanding ĝ − g gives the textbook bound ‖m̂ − m‖·(‖ℓ̂ − ℓ‖ + |θ|·‖m̂ − m‖) / E[V²].
-Rates. Sampling noise shrinks like n^(−1/2). Flexible ML fits typically converge more slowly, for example n^(−1/3). LightGBM's bias is one such error, so about n^(−1/3): it falls behind its own spread. Double ML's bias is a product of two such errors, so about n^(−1/3) × n^(−1/3) = n^(−2/3): faster than the noise, which then dominates. The exponents are typical orders, not laws. Measured in this toy: LightGBM's bias ≈ n^(−0.3); Double ML's product term, computed from the fitted first stages, −0.13 at 2k, −0.09 at 5k, −0.03 at 20k, −0.009 at 50k, −0.003 at 200k, ≈ n^(−0.8). What Double ML needs formally: the product shrinks faster than n^(−1/2), e.g. each error faster than n^(−1/4).
-Click 4, what Double ML needs: (1) every driver of both price and lapse in the model (violation: agents discount customers who threaten to leave); (2) free price variation in every segment: discounts, loadings, A/B tests, tariff changes; less of it needs more data (E[V²] in the formula); (3) a response shape beyond the data: testable only inside it (e.g. T² via econml's treatment_featurizer); segment differences via CausalForestDML.
+Builds
+- Start: axes and truth. Ask: "Which method gets closer with more data?"
+- Click 1, LightGBM medians: 0.16 at 2k, 0.63 at 20k, 0.82 at 200k.
+  - From 2k, bias is 2–4× its own spread: precise but wrong. 95% range at 200k (0.73–0.91) excludes the truth.
+- Click 2, Double ML:
+  - 100–200 policies: nothing works (LightGBM min leaf 50 ≈ constant; Double ML falls to the confounded slope, median −1.12 at 100).
+  - 300–2k: noisy and low (medians 0.75–0.85).
+  - From ≈ 5k: on the truth (median 1.00 at 5k and 200k). SE matches spread (0.049 vs 0.049 at 200k).
+  - 95% CI covers truth in 95% of runs from 500 up (87–100% per size).
+- Click 3, the formulas ("∼" = shrinks like):
+  - LightGBM: bias = price slope of (f̂ − f), one error. Early stopping keeps f̂ − f small, not flat in price → mutes the weak signal (±2 pp vs 29 pp).
+  - 1,000 fixed rounds → slope 0.999, but hold-out loss worse (0.1901 → 0.1918): only the truth says when to stop.
+  - Double ML, ĝ = ℓ̂ − θ·m̂: θ̂ − θ = E[(m̂ − m)(ĝ − g)] / E[T̃²] + noise; E[T̃²] ≈ E[V²]. Only the product survives (Neyman orthogonality).
+  - Textbook bound: ‖m̂ − m‖·(‖ℓ̂ − ℓ‖ + |θ|·‖m̂ − m‖) / E[V²].
+- Rates (typical orders, not laws):
+  - Noise n^(−1/2); flexible ML fits e.g. n^(−1/3).
+  - LightGBM: one error ≈ n^(−1/3), falls behind its spread. Double ML: product ≈ n^(−2/3), faster than the noise.
+  - Measured: LightGBM ≈ n^(−0.3); Double ML product term −0.13 (2k), −0.09 (5k), −0.03 (20k), −0.009 (50k), −0.003 (200k) ≈ n^(−0.8).
+  - Formal need: product faster than n^(−1/2), e.g. each error faster than n^(−1/4).
+- Click 4, what every method needs: the ground rules for any price effect from our own data, LightGBM with price as a feature included.
+  - All drivers of price and lapse in the model (violation: agents discount customers who threaten to leave).
+  - Free price variation in every segment: discounts, loadings, A/B tests, tariff changes. Less of it → more data needed (E[V²]).
+  - A response shape beyond the data, testable only inside it (e.g. T² via econml's treatment_featurizer). LightGBM assumes flat (extrapolation slide), silently.
+  - Difference: Double ML's CI widens when price variation is thin, a visible warning; LightGBM's effect just shrinks into age (the 0.82).
 
-Takeaway: use prediction models to predict, and causal estimators, with their assumptions explicit, to decide.</aside>
+Takeaway: prediction models to predict; causal estimators, with explicit assumptions, to decide.</aside>
 </section>

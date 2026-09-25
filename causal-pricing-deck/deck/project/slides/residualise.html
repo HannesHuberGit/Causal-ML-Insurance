@@ -26,7 +26,7 @@
     <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">2 · Predict price from age</h3>
     <img src="/_blob/7449fae8d99f04432acbadc3a3439608" alt="Price against age with the price model's fitted line, which recovers the smooth tariff." style="width:520px; height:250px">
     <img src="/_blob/18bbf673ce54de878a61abc84c218038" alt="T tilde equals T minus m hat of X" style="width:182px; height:56px">
-    <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price model</span> · first stage</p>
+    <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price model</span> · T̃: discounts and loadings</p>
   </div>
   <div data-build-in="fade 3" style="position:absolute; left:1272px; top:503px; width:520px; height:410px; display:flex; flex-direction:column; gap:10px">
     <h3 style="font-size:28px; font-weight:600; line-height:1.2; color:#14213D">3 · Regress residual on residual</h3>
@@ -35,23 +35,26 @@
     <p style="font-size:24px; line-height:1.35"><span style="color:#1C5CAB; font-weight:600">Slope = price effect</span> · final stage</p>
   </div>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">First stages cross-fitted in 5 folds: each policy is predicted by models that never saw it</p>
-  <aside>Message: Double ML is one equation, estimated in three steps. The grey strip is the whole model; the three columns are how it is fitted.
+  <aside>Message: one equation, three steps. The grey strip is the model; the three columns are how it is fitted.
 
-The model (partially linear model). Y = θ·T + g(X) + ε: lapse is a price effect θ·T plus an age effect g(X) of any shape plus noise, E[ε | X, T] = 0. T = m(X) + V: price is what the tariff predicts from age, m(X), plus free price variation V with E[V | X] = 0 (discounts and loadings).
+The model
+- Y = θ·T + g(X) + ε: price effect + age effect of any shape + noise.
+- T = m(X) + V, E[V | X] = 0: tariff + discounts and loadings.
+- ℓ(X) = E[Y | X] = θ·m(X) + g(X), so Y − ℓ(X) = θ·(T − m(X)) + ε.
+- Age effect gone: θ = slope of lapse residual on price residual (Frisch–Waugh–Lovell with ML). g is never fitted directly.
 
-The trick. Take the expectation given X: ℓ(X) := E[Y | X] = θ·m(X) + g(X). Subtract it from Y: Y − ℓ(X) = θ·(T − m(X)) + ε (on the slide: ≈, with the noise ε left out). The age effect is gone; θ is the slope of the lapse residual on the price residual, whatever g and m look like (Frisch–Waugh–Lovell with ML in place of linear regressions). ML fits only ℓ and m; g is never fitted directly (the ĝ = ℓ̂ − θ·m̂ in the closing slide's notes is just the age effect these two fits imply).
+Builds (aqua = lapse model, violet = price model, blue = Double ML effect)
+- Click 1: LightGBM predicts lapse from age, ℓ̂(X) (econml model_y); Ỹ = Y − ℓ̂(X).
+- Click 2: LightGBM predicts price from age, m̂(X) (model_t), recovers the tariff; T̃ estimates V: the discounts and loadings, the only experiment in the data.
+- Click 3: least squares of Ỹ on T̃ through the origin: θ̂ = 1.02, SE 0.049, 95% CI 0.92–1.11. Truth 1.00.
+  - Dots are 20 bins of T̃; the regression uses all 200,000 policies.
 
-Builds, one per step. Colours: aqua = lapse model, violet = price model, blue = the Double ML price effect.
-1. First stage, econml model_y: LightGBM predicts lapse from age, ℓ̂(X); residual Ỹ = Y − ℓ̂(X).
-2. First stage, econml model_t: LightGBM predicts price from age, m̂(X), and recovers the tariff; T̃ = T − m̂(X) estimates V.
-3. Final stage: least squares of Ỹ on T̃ through the origin (Ỹ ≈ θ̂·T̃ on the slide): θ̂ = Σ T̃·Ỹ / Σ T̃² = 1.02, heteroskedasticity-robust standard error 0.049, 95% CI 0.92 to 1.11. Truth 1.00. The dots are 20 bins of T̃; the regression uses all 200,000 policies.
-In econml: LinearDML(model_y=..., model_t=..., cv=5).fit(Y, T, X=None, W=age); early stopping inside needs a small wrapper class. Chernozhukov et al. write V for the true price residual; econml calls the estimated residuals T_res and Y_res.
+Key points
+- Same learner, same tuning as before: 0.82 with price as a feature, 1.02 when LightGBM only handles the age parts.
+- Information comes only from V. Pure tariff (no discounts, loadings, tests, tariff changes) → θ not identified, CI widens.
 
-Same learner, same tuning as on the extrapolation slide: 0.82 when price is one more feature, 1.02 when LightGBM only handles the age parts. The closing slide shows this is systematic.
-
-Expected question: "Would our GLM not do the same?" In this one-factor toy, yes (1.02), because the tariff is linear in age. With many rating factors a GLM needs hand-built interactions and shapes to compete; Double ML lets ML learn them.
-
-Cross-fitting (footer): nuisance models trained on 4 folds predict the 5th, rotated. In-sample, a flexible model partly memorises each policy's discount and noise, shrinking the residuals and biasing θ̂. In this toy in-sample gives almost the same answer (1.018); it bites with many factors and flexible learners.
-
-Information comes only from V. With a pure tariff (no discounts, loadings, tests or tariff changes) θ is not identified and the confidence interval widens: a warning, not a guarantee (closing slide).</aside>
+If asked
+- "Would our GLM do the same?" Here yes (1.02): tariff is linear in age. With many factors a GLM needs hand-built interactions.
+- Cross-fitting: train on 4 folds, predict the 5th. In-sample fits memorise discounts and noise → bias. Here in-sample gives 1.018; it bites with many factors.
+- econml: LinearDML(model_y=..., model_t=..., cv=5).fit(Y, T, X=None, W=age); early stopping needs a small wrapper.</aside>
 </section>

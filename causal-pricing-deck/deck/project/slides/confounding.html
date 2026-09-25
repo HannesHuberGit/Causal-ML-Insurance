@@ -13,18 +13,34 @@
       <p style="font-size:24px; color:#6B7280">At fixed age</p>
       <p style="font-size:32px; font-weight:600; line-height:1.25; color:#14213D">Higher price, higher lapse</p>
     </div>
-    <p style="font-size:28px; line-height:1.4; color:#14213D">The difference is age: older customers pay more and are more loyal.</p>
   </div>
+  <div data-build-in="fade 3" style="position:absolute; left:1412px; top:640px; width:160px; height:56px; background:#14213D; border-radius:28px; display:flex; align-items:center; justify-content:center"><p style="font-size:26px; font-weight:600; color:#FBFBF8; text-align:center">Age</p></div>
+  <div data-build-in="fade 3" style="position:absolute; left:1192px; top:836px; width:160px; height:56px; background:#14213D; border-radius:28px; display:flex; align-items:center; justify-content:center"><p style="font-size:26px; font-weight:600; color:#FBFBF8; text-align:center">Price</p></div>
+  <div data-build-in="fade 3" style="position:absolute; left:1632px; top:836px; width:160px; height:56px; background:#14213D; border-radius:28px; display:flex; align-items:center; justify-content:center"><p style="font-size:26px; font-weight:600; color:#FBFBF8; text-align:center">Lapse</p></div>
+  <x-connector data-build-in="fade 3" x1="1452" y1="696" x2="1272" y2="836" head="end" route="straight" style="color:#9AA5B8; border-width:3px"></x-connector>
+  <x-connector data-build-in="fade 3" x1="1532" y1="696" x2="1712" y2="836" head="end" route="straight" style="color:#9AA5B8; border-width:3px"></x-connector>
+  <x-connector data-build-in="fade 3" x1="1352" y1="864" x2="1632" y2="864" head="end" route="straight" style="color:#2A78D6; border-width:5px"></x-connector>
+  <p data-build-in="fade 3" style="position:absolute; left:1136px; top:720px; width:190px; font-size:24px; line-height:1.3; color:#4A5568; text-align:right">Tariff rises<br>with age</p>
+  <p data-build-in="fade 3" style="position:absolute; left:1660px; top:720px; width:134px; font-size:24px; line-height:1.3; color:#4A5568">Lapse falls<br>with age</p>
+  <p data-build-in="fade 3" style="position:absolute; left:1372px; top:818px; width:240px; font-size:24px; font-weight:600; color:#1C5CAB; text-align:center">θ, at fixed age</p>
   <p style="position:absolute; left:128px; bottom:64px; width:1480px; font-size:24px; color:#6B7280">200,000 simulated policies · age groups ±2.5 years</p>
-  <aside>Message: age drives both our price and the customer's loyalty. The price effect only becomes visible when age is held fixed, and it is small next to the age effect.
+  <aside>Message: age drives both price and loyalty; the price effect shows only at fixed age, and it is small next to the age effect.
 
-Builds. Start: all policies in grey, and the pale line is the raw trend across all ages: lapse falls as price rises. Pause and ask the room: "So should we raise prices to make customers more loyal?"
-Click 1: colour by age group. Within each narrow group (age ± 2.5 years) the tariff barely changes (about ±0.6%), so prices differ mainly by the random discount or loading. There, a higher price means more lapse, slope ≈ +1 pp per +1% price. The five fitted slopes scatter around 1 (sampling noise, plus a slight pull-down from the age range left within each group).
-Why the groups drift down from left to right: moving right means moving to older customers, who pay more (our tariff) AND lapse less (loyalty). The raw trend is that age effect, not a price effect.
-Click 2: the summary. All ages together, a higher price goes with lower lapse; at fixed age, a higher price means higher lapse. The difference is age, which moves both.
-Size of the two effects, if asked: holding price fixed, age 25 → 75 lowers lapse by 29 pp; holding age fixed, discounts and loadings (standard deviation 2%) typically move lapse by about ±2 pp. The effect we want is the small one. This matters on the closing slide: a model tuned for prediction pays most attention to the big signal.
+Builds
+- Start: grey points, raw trend: lapse falls as price rises. Ask: "So should we raise prices to make customers more loyal?"
+- Click 1: colour by age group (±2.5 years).
+  - Within a group the tariff barely moves (≈ ±0.6%): price differences are mainly discounts and loadings.
+  - There: higher price → more lapse, slope ≈ +1 pp per +1%.
+  - Groups drift down to the right: older customers pay more AND lapse less. The raw trend is that age effect.
+- Click 2: the summary.
+- Click 3: the mechanism. Tariff rises with age, lapse falls with age: every path between price and lapse except θ runs through age (confounding).
+  - θ, the arrow we want, only shows when age is held fixed.
 
-Every model from here on, LightGBM and Double ML alike, sees age. The question is how well each separates a small price effect from a large age effect.
+Sizes, if asked
+- Age 25 → 75 at fixed price: −29 pp lapse.
+- Discounts and loadings at fixed age (SD 2%): typically ±2 pp. The effect we want is the small one.
+- Raw slope −0.86 = true +1.00 + confounding term Cov(price, g) / Var(price) = −1.86.
+- The five fitted slopes scatter around 1: sampling noise, plus a slight pull-down from the age range left within each group.
 
-Only if asked: the raw slope across all ages is −0.86 pp per +1%. It equals the true +1.00 plus a confounding term Cov(price, age effect g) / Var(price) = −1.86.</aside>
+Bridge: every model from here on sees age. The question is who separates a small price effect from a large age effect.</aside>
 </section>
