@@ -49,6 +49,7 @@ F = {
  "f_s1":    [(r"\tilde{Y} \;=\; Y \,-\, ", INK), (r"\hat{\ell}(X)", AQ)],
  "f_s2":    [(r"\tilde{T} \;=\; T \,-\, ", INK), (r"\hat{m}(X)", VI)],
  "f_s3":    [(r"\tilde{Y} \;\approx\; \hat{\theta}\,\tilde{T}", INK)],
+ "f_s3x":   [(r"\tilde{Y} \;\approx\; \hat{\theta}(X)\,\tilde{T}", INK)],
  "f_b1":    [(r"\mathrm{bias} \;\approx\; \mathrm{price\ slope\ of}\;\,(\,\hat{f} - f\,) \;\sim\; n^{-1/3}", INK)],
  "f_b2":    [(r"\mathrm{bias} \;\approx\; \mathbb{E}[", INK), (r"(\hat{m} - m)", VI), (r"\,(\hat{g} - g)] \;/\; \mathbb{E}[V^{2}] \;\sim\; n^{-2/3}", INK)],
 }
