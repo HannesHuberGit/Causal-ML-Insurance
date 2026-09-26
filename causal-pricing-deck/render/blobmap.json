@@ -1,7 +1,6 @@
 {
  "18bbf673ce54de878a61abc84c218038": "final/layers/f_s2.png",
  "1c55950a1883a917fed138e5359b19d2": "final/layers/f_s1.png",
- "1d28f4fe678afc2362f4361a0f6df5b9": "final/layers/f_b2.png",
  "29ddf7f971eb75498108ca7e61816cbb": "final/layers/extra_whatif_L1.png",
  "33b32a827b431c90e650cf0f2fea6438": "final/layers/decision_margin_L0.png",
  "38d8f957bfb32851a1badafe372223fd": "final/layers/f_res.png",
@@ -16,6 +15,7 @@
  "7e8ef45c3b3e8d33a9bbc71ef3c2fd1b": "final/layers/decision_margin_L2.png",
  "8415dd858c7441243335316ea115bcf6": "final/layers/decision_margin_L1.png",
  "8496074573ab0753481622aa2adadc8c": "final/layers/how_step1_L0.png",
+ "b06b966ef60257f021f1833c6fc1e1df": "final/layers/f_b2.png",
  "b5760f09d97730469da68fc618ba3824": "final/layers/extra_whatif_L0.png",
  "b71233fb802225ed2d091427e7d0bdc0": "final/layers/why_convergence_L1.png",
  "ce14c9acee8edaaa5537fa9d9e2714f5": "final/layers/extra_support_L1.png",
