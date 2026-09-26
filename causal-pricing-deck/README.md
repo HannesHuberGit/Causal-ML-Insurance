@@ -60,5 +60,5 @@ python3 render/render.py deck shots --builds   # local screenshots of every buil
   - LightGBM 0.16 at 2k, 0.63 at 20k, 0.82 at 200k.
 - Measured rates:
   - LightGBM bias ≈ n^−0.3;
-  - Double ML product term E[(m̂−m)(ĝ−g)]/E[V²] ≈ n^−0.8;
+  - Double ML product term E[(m̂−m)(ℓ̂−ℓ)]/E[V²] ≈ n^−0.8;
   - on the slide, as typical orders: n^−1/3 and n^−2/3.

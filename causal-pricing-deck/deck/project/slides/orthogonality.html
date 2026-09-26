@@ -13,8 +13,8 @@
     </div>
     <div style="display:flex; flex-direction:column; gap:4px; border-left:4px solid #2A78D6; padding:4px 0px 4px 24px">
       <p style="font-size:24px; font-weight:600; color:#14213D">Double ML</p>
-      <img src="/_blob/1d28f4fe678afc2362f4361a0f6df5b9" alt="bias approximately equals the expectation of the price-model error times the age-effect error, divided by the expectation of V squared, shrinking like n to the minus two thirds" style="width:515px; height:56px">
-      <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price-model error</span> × age-effect error:<br>shrinks faster than the noise</p>
+      <img src="/_blob/b06b966ef60257f021f1833c6fc1e1df" alt="bias approximately equals the expectation of the price-model error times the lapse-model error, divided by the expectation of V squared, shrinking like n to the minus two thirds" style="width:520px; height:56px">
+      <p style="font-size:24px; line-height:1.35"><span style="color:#4A3AA7; font-weight:600">Price-model error</span> × <span style="color:#0F7F5A; font-weight:600">lapse-model error</span>:<br>shrinks faster than the noise</p>
     </div>
   </div>
   <div data-build-in="fade 4" style="position:absolute; left:1092px; top:703px; width:700px; display:flex; flex-direction:column; gap:10px; background:#F1F1EC; border-radius:12px; padding:20px 28px">
@@ -45,7 +45,7 @@ Builds
 - Click 3, the formulas ("∼" = shrinks like):
   - LightGBM: bias = price slope of (f̂ − f), one error. Early stopping keeps f̂ − f small, not flat in price → mutes the weak signal (±2 pp vs 29 pp).
   - 1,000 fixed rounds → slope 0.999, but hold-out loss worse (0.1901 → 0.1918): only the truth says when to stop.
-  - Double ML, ĝ = ℓ̂ − θ·m̂: θ̂ − θ = E[(m̂ − m)(ĝ − g)] / E[T̃²] + noise; E[T̃²] ≈ E[V²]. Only the product survives (Neyman orthogonality).
+  - Double ML: θ̂ − θ = E[(m̂ − m)(ℓ̂ − ℓ)] / E[T̃²] + noise; E[T̃²] ≈ E[V²]. Only the product of the two nuisance errors survives (Neyman orthogonality); g is never fitted, only ℓ and m are.
   - Textbook bound: ‖m̂ − m‖·(‖ℓ̂ − ℓ‖ + |θ|·‖m̂ − m‖) / E[V²].
 - Rates (typical orders, not laws):
   - Noise n^(−1/2); flexible ML fits e.g. n^(−1/3).

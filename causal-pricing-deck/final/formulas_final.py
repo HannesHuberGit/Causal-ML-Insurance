@@ -51,7 +51,7 @@ F = {
  "f_s3":    [(r"\tilde{Y} \;\approx\; \hat{\theta}\,\tilde{T}", INK)],
  "f_s3x":   [(r"\tilde{Y} \;\approx\; \hat{\theta}(X)\,\tilde{T}", INK)],
  "f_b1":    [(r"\mathrm{bias} \;\approx\; \mathrm{price\ slope\ of}\;\,(\,\hat{f} - f\,) \;\sim\; n^{-1/3}", INK)],
- "f_b2":    [(r"\mathrm{bias} \;\approx\; \mathbb{E}[", INK), (r"(\hat{m} - m)", VI), (r"\,(\hat{g} - g)] \;/\; \mathbb{E}[V^{2}] \;\sim\; n^{-2/3}", INK)],
+ "f_b2":    [(r"\mathrm{bias} \;\approx\; \mathbb{E}[", INK), (r"(\hat{m} - m)", VI), (r"\,(", INK), (r"\hat{\ell} - \ell", AQ), (r")] \;/\; \mathbb{E}[V^{2}] \;\sim\; n^{-2/3}", INK)],
 }
 if __name__ == "__main__":
     sizes = {k: render(k, v) for k, v in F.items()}
